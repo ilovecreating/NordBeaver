@@ -1,6 +1,6 @@
 <template>
   <div class="w-[1200 px] px-[20px]">
-    <main class="w-[563.6px] block border-[1px]">
+    <main class="w-[563.6px] block border-[1px] h-[899px]">
       <div class="flex block__item-1 pt-[15px] pr-[16px]">
         <div
           class="px-[50px] py-[15px] text-[white] font-['Commuters-Sans'] bg-[#242223] min-w-[249px] bord-1 text-[24px] leading-[30px] uppercase"
@@ -34,7 +34,7 @@
               11/100
             </div>
           </div>
-          <Netting />
+          <Netting :all-info="allInfo" />
         </HeadlessTabPanels>
       </HeadlessTabGroup>
       <div class="block__item-4"></div>
@@ -43,6 +43,13 @@
 </template>
 
 <script setup>
+import Materials from '~/helpers/Core';
+
+const theArmory = new Materials();
+
+const allPageOne = await theArmory.getAllItems(1);
+const allInfo = ref(allPageOne);
+console.log();
 const category = ref([
   {
     title: 'all items',
@@ -62,6 +69,7 @@ const category = ref([
 <style scoped lang="scss">
 .block {
   display: grid;
+
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   &__item-1 {
     grid-area: 1 / 1 / span 1 / span 6;
@@ -77,7 +85,10 @@ const category = ref([
     border-right: 1px solid #000000;
   }
   &__item-3 {
-    grid-area: 2 / 2 / span 6 / span 5;
+    grid-area: 2 / 2 / span 10 / span 5;
+    overflow: auto;
+    scrollbar-color: #d9d9d9 #242223;
+    scrollbar-width: thin;
   }
   &__item-4 {
   }
