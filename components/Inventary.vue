@@ -19,7 +19,7 @@
       <HeadlessTabGroup>
         <div></div>
         <HeadlessTabList class="w-[64px] flex items-center bg-[#393839] block__item-2">
-          <Asidebar class="flex flex-col items-center" />
+          <Asidebar :all-info="allInfo" class="flex flex-col items-center" />
         </HeadlessTabList>
         <HeadlessTabPanels class="min-w-[499px] bg-[#242223] block__item-3">
           <div class="flex justify-between my-[12px] ml-[14px] mr-[22px] items-center uppercase">
@@ -34,22 +34,37 @@
               11/100
             </div>
           </div>
-          <Netting :all-info="allInfo" />
+          <Netting :filt-misc="filtMisc" :all-info="allInfo"> </Netting>
         </HeadlessTabPanels>
       </HeadlessTabGroup>
+
       <div class="block__item-4"></div>
     </main>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Materials from '~/helpers/Core';
 
 const theArmory = new Materials();
 
-const allPageOne = await theArmory.getAllItems(1);
+const allPageOne = await theArmory.getAllItems(2);
 const allInfo = ref(allPageOne);
-console.log();
+
+import type { aboutAll } from '~/interfaces/load';
+const filtArmor = [];
+const filtMisc = [];
+const filtWeapons = [];
+
+if (allInfo.value) {
+  allInfo.value.filter((item) => {
+    if (item.type === 'misc') {
+      filtMisc.push(item);
+    }
+  });
+  console.log(filtMisc);
+}
+
 const category = ref([
   {
     title: 'all items',
@@ -64,6 +79,8 @@ const category = ref([
     title: 'Misc',
   },
 ]);
+
+console.log(category.value[0].title);
 </script>
 
 <style scoped lang="scss">

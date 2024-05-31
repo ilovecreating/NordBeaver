@@ -80,6 +80,10 @@
   </HeadlessTab>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+// const props = defineProps<{
+//   allInfo: aboutAll[];
+// }>()
+</script>
 
 <style scoped lang="scss"></style>
