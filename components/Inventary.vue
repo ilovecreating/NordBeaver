@@ -17,24 +17,154 @@
         </div>
       </div>
       <HeadlessTabGroup>
-        <div></div>
         <HeadlessTabList class="w-[64px] flex items-center bg-[#393839] block__item-2">
           <Asidebar :all-info="allInfo" class="flex flex-col items-center" />
         </HeadlessTabList>
         <HeadlessTabPanels class="min-w-[499px] bg-[#242223] block__item-3">
-          <div class="flex justify-between my-[12px] ml-[14px] mr-[22px] items-center uppercase">
-            <HeadlessTabPanel
-              v-for="(elem, index) in category"
-              :key="index"
-              class="text-[white] font-['Commuters-Sans'] text-[20px] leading-[25px]"
-            >
-              {{ elem.title }}
+          <div class="my-[12px] ml-[14px] mr-[22px] uppercase">
+            <HeadlessTabPanel>
+              <div class="flex justify-between">
+                <div
+                  class="pl-[10px] font-['Commuters-Sans'] uppercase text-[white] text-[20px] leading-[25px]"
+                >
+                  {{ category.allItems }}
+                </div>
+                <div
+                  class="text-[white] font-['Apercu-Pro'] text-[19px] leading-[19px] font-[500] pr-[13px]"
+                >
+                  11/100
+                </div>
+              </div>
+
+              <Netting :filt-misc="allInfo" :all-info="allInfo">
+                <div v-for="(elem, ind) in allInfo" :key="ind" class="relative block-grid__elem">
+                  <div
+                    :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                    class="absolute text-[white]"
+                  >
+                    {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                  </div>
+                  <div :class="{ counts: elem.count }">{{ elem.count }}</div>
+                  <img
+                    :class="{
+                      'bg-transparent': true,
+                      'bg-gradient-purple': elem.type === 'weapon',
+                      'bg-gradient-blue': elem.type === 'armor',
+                      ' opacity-[37%]': elem.cooldown,
+                    }"
+                    :src="elem.imageUrl"
+                    alt="/public/misc.svg"
+                  />
+                </div>
+                <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+              ></Netting>
             </HeadlessTabPanel>
-            <div class="text-[white] font-['Apercu-Pro'] text-[19px] leading-[19px] font-[500]">
-              11/100
-            </div>
           </div>
-          <Netting :filt-misc="filtMisc" :all-info="allInfo"> </Netting>
+          <HeadlessTabPanel
+            ><div class="flex justify-between">
+              <div
+                class="pl-[10px] font-['Commuters-Sans'] uppercase text-[white] text-[20px] leading-[25px]"
+              >
+                {{ category.armors }}
+              </div>
+              <div
+                class="text-[white] font-['Apercu-Pro'] text-[19px] leading-[19px] font-[500] pr-[13px]"
+              >
+                11/100
+              </div>
+            </div>
+            <Netting :filt-misc="filtArmor" :all-info="allInfo">
+              <div v-for="(elem, ind) in filtArmor" :key="ind" class="relative block-grid__elem">
+                <div
+                  :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                  class="absolute text-[white]"
+                >
+                  {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                </div>
+                <div :class="{ counts: elem.count }">{{ elem.count }}</div>
+                <img
+                  :class="{
+                    'bg-transparent': true,
+                    'bg-gradient-purple': elem.type === 'weapon',
+                    'bg-gradient-blue': elem.type === 'armor',
+                    ' opacity-[37%]': elem.cooldown,
+                  }"
+                  :src="elem.imageUrl"
+                  alt="/public/misc.svg"
+                />
+              </div>
+              <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
+          ></HeadlessTabPanel>
+          <HeadlessTabPanel
+            ><div class="flex justify-between">
+              <div
+                class="pl-[10px] font-['Commuters-Sans'] uppercase text-[white] text-[20px] leading-[25px]"
+              >
+                {{ category.weapons }}
+              </div>
+              <div
+                class="text-[white] font-['Apercu-Pro'] text-[19px] leading-[19px] font-[500] pr-[13px]"
+              >
+                11/100
+              </div>
+            </div>
+            <Netting :filt-misc="filtMisc" :all-info="allInfo">
+              <div v-for="(elem, ind) in filtWeapons" :key="ind" class="relative block-grid__elem">
+                <div
+                  :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                  class="absolute text-[white]"
+                >
+                  {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                </div>
+                <div :class="{ counts: elem.count }">{{ elem.count }}</div>
+                <img
+                  :class="{
+                    'bg-transparent': true,
+                    'bg-gradient-purple': elem.type === 'weapon',
+                    'bg-gradient-blue': elem.type === 'armor',
+                    ' opacity-[37%]': elem.cooldown,
+                  }"
+                  :src="elem.imageUrl"
+                  alt="/public/misc.svg"
+                />
+              </div>
+              <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
+          ></HeadlessTabPanel>
+          <HeadlessTabPanel
+            ><div class="flex justify-between">
+              <div
+                class="pl-[10px] font-['Commuters-Sans'] uppercase text-[white] text-[20px] leading-[25px]"
+              >
+                {{ category.misc }}
+              </div>
+              <div
+                class="text-[white] font-['Apercu-Pro'] text-[19px] leading-[19px] font-[500] pr-[13px]"
+              >
+                11/100
+              </div>
+            </div>
+            <Netting :filt-misc="filtMisc" :all-info="allInfo">
+              <div v-for="(elem, ind) in filtMisc" :key="ind" class="relative block-grid__elem">
+                <div
+                  :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                  class="absolute text-[white]"
+                >
+                  {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                </div>
+                <div :class="{ counts: elem.count }">{{ elem.count }}</div>
+                <img
+                  :class="{
+                    'bg-transparent': true,
+                    'bg-gradient-purple': elem.type === 'weapon',
+                    'bg-gradient-blue': elem.type === 'armor',
+                    ' opacity-[37%]': elem.cooldown,
+                  }"
+                  :src="elem.imageUrl"
+                  alt="/public/misc.svg"
+                />
+              </div>
+              <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
+          ></HeadlessTabPanel>
         </HeadlessTabPanels>
       </HeadlessTabGroup>
 
@@ -48,13 +178,15 @@ import Materials from '~/helpers/Core';
 
 const theArmory = new Materials();
 
-const allPageOne = await theArmory.getAllItems(2);
+const allPageOne = await theArmory.getAllItems(3);
 const allInfo = ref(allPageOne);
 
 import type { aboutAll } from '~/interfaces/load';
 const filtArmor = [];
 const filtMisc = [];
 const filtWeapons = [];
+const cages = 41;
+const extractedData = allInfo;
 
 if (allInfo.value) {
   allInfo.value.filter((item) => {
@@ -62,25 +194,32 @@ if (allInfo.value) {
       filtMisc.push(item);
     }
   });
-  console.log(filtMisc);
+  allInfo.value.filter((item) => {
+    if (item.type === 'weapon') {
+      filtWeapons.push(item);
+    }
+  });
+  allInfo.value.filter((item) => {
+    if (item.type === 'armor') {
+      filtArmor.push(item);
+    }
+  });
+
+  extractedData.value.map((item) => {
+    if (item['cooldown']) {
+      item['cooldown'] = new Date();
+      const seconds = item['cooldown'].getSeconds() + `s`;
+      item['cooldown'] = seconds;
+    }
+  });
 }
 
-const category = ref([
-  {
-    title: 'all items',
-  },
-  {
-    title: 'Armor',
-  },
-  {
-    title: 'Weapons',
-  },
-  {
-    title: 'Misc',
-  },
-]);
-
-console.log(category.value[0].title);
+const category = ref({
+  allItems: 'All items',
+  armors: 'Armors',
+  misc: 'miscs',
+  weapons: 'weapons',
+});
 </script>
 
 <style scoped lang="scss">
@@ -102,7 +241,7 @@ console.log(category.value[0].title);
     border-right: 1px solid #000000;
   }
   &__item-3 {
-    grid-area: 2 / 2 / span 10 / span 5;
+    grid-area: 2/2 / span 10 / span 3;
     overflow: auto;
     scrollbar-color: #d9d9d9 #242223;
     scrollbar-width: thin;

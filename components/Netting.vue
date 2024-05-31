@@ -1,49 +1,17 @@
 <template>
   <div class="px-[14px] block-grid grid">
-    <div v-for="(item, index) in props.allInfo" :key="index" class="relative block-grid__elem">
-      <div
-        :class="{ charges: item.charges, 'block-grid__elem-cooldown': item.cooldown }"
-        class="absolute text-[white]"
-      >
-        {{ item.charges }} {{ item.charges }} {{ item.cooldown }}
-      </div>
-      <div :class="{ counts: item.count }">{{ item.count }}</div>
-      <img
-        :class="{
-          'bg-transparent': true,
-          'bg-gradient-purple': item.type === 'weapon',
-          'bg-gradient-blue': item.type === 'armor',
-          ' opacity-[37%]': item.cooldown,
-        }"
-        :src="item.imageUrl"
-        alt="/public/misc.svg"
-      />
-    </div>
-    <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div>
+    <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 import type aboutAll from '/interfaces/load';
 
-const cages = 41;
 const props = defineProps<{
   allInfo: aboutAll[];
   filtMisc: aboutAll[];
 }>();
 
-const extractedData = props.allInfo;
-
-if (props.allInfo) {
-  extractedData.map((item) => {
-    if (item['cooldown']) {
-      item['cooldown'] = new Date();
-      const seconds = item['cooldown'].getSeconds() + `s`;
-      item['cooldown'] = seconds;
-    }
-  });
-  console.log(extractedData);
-}
 //async function getSec() {
 //  await props.allInfo.forEach((elem) => {
 //    const newElem = new Date(elem.cooldown);
@@ -54,10 +22,11 @@ if (props.allInfo) {
 //getSec();
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .block-grid {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 100px 100px 100px 100px 100px 100px 100px 100px;
+  height: 1200px;
 
   &__elem {
     display: flex;
