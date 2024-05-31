@@ -1,26 +1,11 @@
 <template>
+  <!-- Инициализация второй грид-сетки -->
   <div class="px-[14px] block-grid grid">
     <slot />
   </div>
 </template>
 
-<script setup lang="ts">
-import type aboutAll from '/interfaces/load';
-
-const props = defineProps<{
-  allInfo: aboutAll[];
-  filtMisc: aboutAll[];
-}>();
-
-//async function getSec() {
-//  await props.allInfo.forEach((elem) => {
-//    const newElem = new Date(elem.cooldown);
-//    const cooldownSeconds = newElem.getSeconds();
-//    console.log(cooldownSeconds);
-//  });
-//}
-//getSec();
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss">
 .block-grid {
@@ -50,6 +35,9 @@ const props = defineProps<{
     }
   }
 }
+
+// Стили для каждой ячейки.
+
 .bg-gradient-purple {
   background: radial-gradient(circle, rgba(127, 89, 206, 1) 00%, rgba(0, 0, 0, 1) 100%);
 }

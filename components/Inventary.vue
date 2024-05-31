@@ -1,6 +1,7 @@
 <template>
   <div class="w-[1200 px] px-[20px]">
     <main class="w-[563.6px] block border-[1px] h-[899px]">
+      <!-- 2 вкладки backpack и Nexus -->
       <div class="flex block__item-1 pt-[15px] pr-[16px]">
         <div
           class="px-[50px] py-[15px] text-[white] font-['Commuters-Sans'] bg-[#242223] min-w-[249px] bord-1 text-[24px] leading-[30px] uppercase"
@@ -17,9 +18,11 @@
         </div>
       </div>
       <HeadlessTabGroup>
+        <!-- Название каждой из 4 вкладок. -->
         <HeadlessTabList class="w-[64px] flex items-center bg-[#393839] block__item-2">
           <Asidebar :all-info="allInfo" class="flex flex-col items-center" />
         </HeadlessTabList>
+        <!-- Содержимое каждой из 4 вкладок. -->
         <HeadlessTabPanels class="min-w-[499px] bg-[#242223] block__item-3">
           <div class="my-[12px] ml-[14px] mr-[22px] uppercase">
             <HeadlessTabPanel>
@@ -36,7 +39,7 @@
                 </div>
               </div>
 
-              <Netting :filt-misc="allInfo" :all-info="allInfo">
+              <Netting>
                 <div v-for="(elem, ind) in allInfo" :key="ind" class="relative block-grid__elem">
                   <div
                     :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
@@ -73,7 +76,7 @@
                 11/100
               </div>
             </div>
-            <Netting :filt-misc="filtArmor" :all-info="allInfo">
+            <Netting>
               <div v-for="(elem, ind) in filtArmor" :key="ind" class="relative block-grid__elem">
                 <div
                   :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
@@ -163,6 +166,7 @@
                   alt="/public/misc.svg"
                 />
               </div>
+
               <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
           ></HeadlessTabPanel>
         </HeadlessTabPanels>
@@ -175,54 +179,36 @@
 
 <script setup lang="ts">
 import Materials from '~/helpers/Core';
+import type { aboutAllFiltered } from '~/interfaces/load';
+import type { T } from '~/interfaces/load';
+import getFilter from '~/helpers/filter';
 
-const theArmory = new Materials();
+// Инициализируем экземпляр класса Materials.
 
-const allPageOne = await theArmory.getAllItems(3);
+const category = new Materials('All items', 'Armors', 'miscs', 'weapons');
+
+// Запуск страницы, создание запроса на сервер. Поменяйте параметр на 1,2,3, чтобы получить разные итемы.
+
+const allPageOne = await category.getAllItems(1);
+
+// Declaring params
+
 const allInfo = ref(allPageOne);
+const filtArmor = <aboutAllFiltered[]>[];
+const filtMisc = <aboutAllFiltered[]>[];
+const filtWeapons = <aboutAllFiltered[]>[];
+const cages = 41; // для получения непустых ячеек
+const extractedData = allInfo; // для получения данных из timestampp в секунды.
 
-import type { aboutAll } from '~/interfaces/load';
-const filtArmor = [];
-const filtMisc = [];
-const filtWeapons = [];
-const cages = 41;
-const extractedData = allInfo;
+// Проверяем, выполнился ли промис и если да, то запускаем фильтрацию.
 
 if (allInfo.value) {
-  allInfo.value.filter((item) => {
-    if (item.type === 'misc') {
-      filtMisc.push(item);
-    }
-  });
-  allInfo.value.filter((item) => {
-    if (item.type === 'weapon') {
-      filtWeapons.push(item);
-    }
-  });
-  allInfo.value.filter((item) => {
-    if (item.type === 'armor') {
-      filtArmor.push(item);
-    }
-  });
-
-  extractedData.value.map((item) => {
-    if (item['cooldown']) {
-      item['cooldown'] = new Date();
-      const seconds = item['cooldown'].getSeconds() + `s`;
-      item['cooldown'] = seconds;
-    }
-  });
+  getFilter(allInfo, filtArmor, filtMisc, filtWeapons, extractedData);
 }
-
-const category = ref({
-  allItems: 'All items',
-  armors: 'Armors',
-  misc: 'miscs',
-  weapons: 'weapons',
-});
 </script>
 
 <style scoped lang="scss">
+// Глобальная грид-разметка
 .block {
   display: grid;
 
@@ -245,8 +231,6 @@ const category = ref({
     overflow: auto;
     scrollbar-color: #d9d9d9 #242223;
     scrollbar-width: thin;
-  }
-  &__item-4 {
   }
 }
 .block {

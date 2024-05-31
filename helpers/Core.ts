@@ -1,9 +1,22 @@
-import axios from '#imports';
+import type { aboutAll } from '~/interfaces/load';
 
-export default class Materials {
-  resp = [];
+// Инициализируем класс для создания будущих экземпляров. Реализуем глобальный метод, который получает данные.
 
-  async getAllItems(url: number) {
+export default class Materials implements aboutAll {
+  allItems?: string;
+  armors?: string;
+  misc?: string;
+  weapons?: string;
+  constructor(allItems: string, armors: string, misc: string, weapons: string) {
+    this.allItems = allItems;
+    this.armors = armors;
+    this.misc = misc;
+    this.weapons = weapons;
+  }
+
+  resp: aboutAll[] = [];
+
+  async getAllItems<ResultType = Record<string, any>>(url: number): Promise<ResultType> {
     try {
       const response = await fetch(
         `https://us-central1-seven-seven-bit-inhouse-helper.cloudfunctions.net/vueDevTestTask-getInventoryState?case=${url}`,
@@ -12,17 +25,7 @@ export default class Materials {
 
       this.resp = data.inventory;
       navigateTo(`/?case=${url}`);
-      return this.resp;
+      return this.resp as any | undefined;
     } catch (error) {}
   }
 }
-
-//   async getAllItems(url: number) {
-//     const { data } = await axios.get(
-//       `https://us-central1-seven-seven-bit-inhouse-helper.cloudfunctions.net/vueDevTestTask-getInventoryState?case=${url}`,
-//     );
-//     this.response = data.value;
-//     console.log(this.response);
-//
-//   }}
-//

@@ -1,5 +1,6 @@
 <template>
-  <HeadlessTab as="template" v-slot="{ selected }" class="">
+  <!-- Переключение по вкладкам с помощью v-slot -->
+  <HeadlessTab as="template" v-slot="{ selected }">
     <svg
       class="mt-[16px] mb-[16px]"
       :class="['opacity-[0.5]', selected ? 'opacity-[1]' : '']"
@@ -27,7 +28,7 @@
       />
     </svg>
   </HeadlessTab>
-  <HeadlessTab as="template" v-slot="{ selected }" class="">
+  <HeadlessTab as="template" v-slot="{ selected }">
     <svg
       :class="['opacity-[0.5]', selected ? 'opacity-[1]' : '']"
       class="mb-[16px]"
@@ -44,7 +45,7 @@
       />
     </svg>
   </HeadlessTab>
-  <HeadlessTab as="template" v-slot="{ selected }" class="">
+  <HeadlessTab as="template" v-slot="{ selected }">
     <svg
       :class="['opacity-[0.5]', selected ? 'opacity-[1]' : '']"
       class="mb-[16px]"
@@ -61,7 +62,7 @@
       />
     </svg>
   </HeadlessTab>
-  <HeadlessTab as="template" v-slot="{ selected }" class="">
+  <HeadlessTab as="template" v-slot="{ selected }">
     <svg
       :class="['opacity-[0.5]', selected ? 'opacity-[1]' : '']"
       width="33"
@@ -80,10 +81,6 @@
   </HeadlessTab>
 </template>
 
-<script setup lang="ts">
-// const props = defineProps<{
-//   allInfo: aboutAll[];
-// }>()
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss"></style>
