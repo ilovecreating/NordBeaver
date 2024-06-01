@@ -24,8 +24,11 @@ export default class Materials implements aboutAll {
       const data = await response.json();
 
       this.resp = data.inventory;
+      console.log('All settled. Data fetched');
       navigateTo(`/?case=${url}`);
       return this.resp as any | undefined;
-    } catch (error) {}
+    } catch (error) {
+      console.log('something goes wrong');
+    }
   }
 }

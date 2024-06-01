@@ -19,7 +19,7 @@
       </div>
       <HeadlessTabGroup>
         <!-- Название каждой из 4 вкладок. -->
-        <HeadlessTabList class="w-[64px] flex items-center bg-[#393839] block__item-2">
+        <HeadlessTabList class="w-[64px] flex flex-col items-center bg-[#393839] block__item-2">
           <Asidebar :all-info="allInfo" class="flex flex-col items-center" />
         </HeadlessTabList>
         <!-- Содержимое каждой из 4 вкладок. -->
@@ -42,25 +42,44 @@
               <Netting>
                 <div v-for="(elem, ind) in allInfo" :key="ind" class="relative block-grid__elem">
                   <div
-                    :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
-                    class="absolute text-[white]"
+                    ref="item"
+                    @mousemove="showTooltip(e, ind)"
+                    @mouseleave="hideTooltip"
+                    class="relative"
                   >
-                    {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                    <div
+                      ref="tooltip"
+                      v-if="currentPosition === ind"
+                      :class="{ [`tooltip-` + ind]: isTooltipVisible }"
+                      class="tooltip text-[#454545] uppercase text-[20px]"
+                      :style="{ top: tooltipTop + 'px', left: tooltipLeft + 'px' }"
+                    >
+                      {{ elem.type }}
+                    </div>
+
+                    <div
+                      :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                      class="absolute text-[white]"
+                    >
+                      {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                    </div>
+                    <div :class="{ counts: elem.count }">
+                      {{ elem.count }}
+                    </div>
+                    <img
+                      :class="{
+                        'bg-transparent': true,
+                        'bg-gradient-purple': elem.type === 'weapon',
+                        'bg-gradient-blue': elem.type === 'armor',
+                        ' opacity-[37%]': elem.cooldown,
+                      }"
+                      :src="elem.imageUrl"
+                      alt="/public/misc.svg"
+                    />
                   </div>
-                  <div :class="{ counts: elem.count }">{{ elem.count }}</div>
-                  <img
-                    :class="{
-                      'bg-transparent': true,
-                      'bg-gradient-purple': elem.type === 'weapon',
-                      'bg-gradient-blue': elem.type === 'armor',
-                      ' opacity-[37%]': elem.cooldown,
-                    }"
-                    :src="elem.imageUrl"
-                    alt="/public/misc.svg"
-                  />
                 </div>
-                <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
-              ></Netting>
+                <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div>
+              </Netting>
             </HeadlessTabPanel>
           </div>
           <HeadlessTabPanel
@@ -147,10 +166,11 @@
               </div>
             </div>
             <Netting :filt-misc="filtMisc" :all-info="allInfo">
-              <div v-for="(elem, ind) in filtMisc" :key="ind" class="relative block-grid__elem">
+              <div v-for="(elem, ind) in filtMisc" :key="ind" class="block-grid__elem">
+                <div :class="getClass(ind)">{{ console.log(elem.charges) }}</div>
                 <div
                   :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
-                  class="absolute text-[white]"
+                  class="tooltip"
                 >
                   {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
                 </div>
@@ -169,6 +189,21 @@
 
               <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
           ></HeadlessTabPanel>
+          <HeadlessTabPanel>
+            <Netting
+              ><div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+            ></Netting>
+          </HeadlessTabPanel>
+          <HeadlessTabPanel>
+            <Netting
+              ><div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+            ></Netting>
+          </HeadlessTabPanel>
+          <HeadlessTabPanel>
+            <Netting
+              ><div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+            ></Netting>
+          </HeadlessTabPanel>
         </HeadlessTabPanels>
       </HeadlessTabGroup>
 
@@ -193,18 +228,126 @@ const allPageOne = await category.getAllItems(1);
 
 // Declaring params
 
-const allInfo = ref(allPageOne);
+const allInfo = [
+  {
+    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    type: 'misc',
+    name: 'Strange Potion',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+    count: 1,
+    cooldown: 10,
+    charges: 3,
+    maxCharges: 3,
+  },
+  {
+    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    type: 'misc',
+    name: 'Strange Potion',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+    count: 1,
+    cooldown: 10,
+    charges: 3,
+    maxCharges: 3,
+  },
+  {
+    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    type: 'misc',
+    name: 'Strange Potion',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+    count: 1,
+    cooldown: 10,
+    charges: 3,
+    maxCharges: 3,
+  },
+  {
+    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    type: 'armor',
+    name: 'Strange Potion',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+    count: 1,
+    cooldown: 10,
+    charges: 3,
+    maxCharges: 3,
+  },
+  {
+    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    type: 'misc',
+    name: 'Strange Potion',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+    count: 1,
+    cooldown: 10,
+    charges: 3,
+    maxCharges: 3,
+  },
+];
+
+function getClass(index) {
+  return { [`active-${index}`]: allInfo.value[index] };
+}
+
+// Когда сервер очнётся, раскомментируй.
+//const allInfo = ref(allPageOne);
 const filtArmor = <aboutAllFiltered[]>[];
 const filtMisc = <aboutAllFiltered[]>[];
 const filtWeapons = <aboutAllFiltered[]>[];
-const cages = 41; // для получения непустых ячеек
+const cages = 100; // для получения непустых ячеек
 const extractedData = allInfo; // для получения данных из timestampp в секунды.
 
 // Проверяем, выполнился ли промис и если да, то запускаем фильтрацию.
 
 if (allInfo.value) {
   getFilter(allInfo, filtArmor, filtMisc, filtWeapons, extractedData);
+  const isHovered = allInfo.value.map(() => true);
+  console.log(isHovered[0]);
+
+  console.log(allInfo.value[0]);
+
+  //  const setActive = (elem, value) => {
+  //    return (elem.isTrue = value);
+  //  };
 }
+
+// Переменные для вычисления текущий позиции относительно
+
+const item = ref('');
+const tooltip = ref('');
+const currentPosition = ref(0);
+const isTooltipVisible = ref(false);
+const tooltipTop = ref(0);
+const tooltipLeft = ref(0);
+
+const handleMouseMove = (e) => {
+  if (isTooltipVisible.value) {
+    tooltipTop.value = e.clientY + 10;
+    tooltipLeft.value = e.clientX + 10;
+  }
+};
+
+const showTooltip = (e, index) => {
+  currentPosition.value = index;
+  isTooltipVisible.value = true;
+  tooltipTop.value = e.clientY + 10;
+  tooltipLeft.value = e.clientX + 10;
+};
+
+const hideTooltip = () => {
+  isTooltipVisible.value = false;
+  currentPosition.value = '';
+};
+
+(async () => {
+  await new Promise((resolve) => {
+    hideTooltip();
+    window.addEventListener('mousemove', handleMouseMove);
+
+    resolve();
+  });
+})();
 </script>
 
 <style scoped lang="scss">
@@ -255,5 +398,17 @@ if (allInfo.value) {
 }
 .bord-3 {
   border-bottom: 1px solid #000000;
+}
+
+// Стиль для подсказки
+
+.tooltip {
+  display: block;
+  position: fixed;
+  background-color: #1a1a1a;
+  padding: 5px 10px;
+  border: 1px solid #454545;
+  border-radius: 5px;
+  z-index: 999;
 }
 </style>
