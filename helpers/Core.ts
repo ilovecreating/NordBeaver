@@ -18,12 +18,15 @@ export default class Materials implements aboutAll {
 
   async getAllItems<ResultType = Record<string, any>>(url: number): Promise<ResultType> {
     try {
-      const response = await fetch(
-        `https://us-central1-seven-seven-bit-inhouse-helper.cloudfunctions.net/vueDevTestTask-getInventoryState?case=${url}`,
-      );
+      // Не работает, так как сервер упал.
+      // const response = await fetch(
+      //   `https://us-central1-seven-seven-bit-inhouse-helper.cloudfunctions.net/vueDevTestTask-getInventoryState?case=${url}`,
+      // );
+      // Альтернатива
+      const response = await fetch(`https://1f7ce3331f28c6ff.mokky.dev/${url}`);
       const data = await response.json();
 
-      this.resp = data.inventory;
+      this.resp = data;
       console.log('All settled. Data fetched');
       navigateTo(`/?case=${url}`);
       return this.resp as any | undefined;

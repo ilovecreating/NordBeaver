@@ -49,10 +49,13 @@
                   >
                     <div
                       ref="tooltip"
-                      v-if="currentPosition === ind"
-                      :class="{ [`tooltip-` + ind]: isTooltipVisible }"
+                      v-if="allPiniaInfo.currentPosition === ind"
+                      :class="{ [`tooltip-` + ind]: allPiniaInfo.isTooltipVisible }"
                       class="tooltip text-[#454545] uppercase text-[20px]"
-                      :style="{ top: tooltipTop + 'px', left: tooltipLeft + 'px' }"
+                      :style="{
+                        top: allPiniaInfo.tooltipTop + 'px',
+                        left: allPiniaInfo.tooltipLeft + 'px',
+                      }"
                     >
                       {{ elem.type }}
                     </div>
@@ -81,7 +84,11 @@
                     />
                   </div>
                 </div>
-                <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div>
+                <div
+                  v-for="na in allPiniaInfo.cages"
+                  :key="na"
+                  class="block-grid__elem empty"
+                ></div>
               </Netting>
             </HeadlessTabPanel>
           </div>
@@ -101,24 +108,48 @@
             <Netting>
               <div v-for="(elem, ind) in filtArmor" :key="ind" class="relative block-grid__elem">
                 <div
-                  :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
-                  class="absolute text-[white]"
+                  ref="item"
+                  @mousemove="showTooltip(e, ind)"
+                  @mouseleave="hideTooltip"
+                  class="relative"
                 >
-                  {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                  <div
+                    ref="tooltip"
+                    v-if="allPiniaInfo.currentPosition === ind"
+                    :class="{ [`tooltip-` + ind]: allPiniaInfo.isTooltipVisible }"
+                    class="tooltip text-[#454545] uppercase text-[20px]"
+                    :style="{
+                      top: allPiniaInfo.tooltipTop + 'px',
+                      left: allPiniaInfo.tooltipLeft + 'px',
+                    }"
+                  >
+                    {{ elem.type }}
+                  </div>
+
+                  <div
+                    :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                    class="absolute text-[white]"
+                  >
+                    {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                  </div>
+                  <div :class="{ counts: elem.count }">{{ elem.count }}</div>
+                  <img
+                    :class="{
+                      'bg-transparent': true,
+                      'bg-gradient-purple': elem.type === 'weapon',
+                      'bg-gradient-blue': elem.type === 'armor',
+                      ' opacity-[37%]': elem.cooldown,
+                    }"
+                    :src="elem.imageUrl"
+                    alt="/public/misc.svg"
+                  />
                 </div>
-                <div :class="{ counts: elem.count }">{{ elem.count }}</div>
-                <img
-                  :class="{
-                    'bg-transparent': true,
-                    'bg-gradient-purple': elem.type === 'weapon',
-                    'bg-gradient-blue': elem.type === 'armor',
-                    ' opacity-[37%]': elem.cooldown,
-                  }"
-                  :src="elem.imageUrl"
-                  alt="/public/misc.svg"
-                />
               </div>
-              <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
+              <div
+                v-for="na in allPiniaInfo.cages"
+                :key="na"
+                class="block-grid__elem empty"
+              ></div></Netting
           ></HeadlessTabPanel>
           <HeadlessTabPanel
             ><div class="flex justify-between">
@@ -136,24 +167,47 @@
             <Netting :filt-misc="filtMisc" :all-info="allInfo">
               <div v-for="(elem, ind) in filtWeapons" :key="ind" class="relative block-grid__elem">
                 <div
-                  :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
-                  class="absolute text-[white]"
+                  ref="item"
+                  @mousemove="showTooltip(e, ind)"
+                  @mouseleave="hideTooltip"
+                  class="relative"
                 >
-                  {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                  <div
+                    ref="tooltip"
+                    v-if="allPiniaInfo.currentPosition === ind"
+                    :class="{ [`tooltip-` + ind]: allPiniaInfo.isTooltipVisible }"
+                    class="tooltip text-[#454545] uppercase text-[20px]"
+                    :style="{
+                      top: allPiniaInfo.tooltipTop + 'px',
+                      left: allPiniaInfo.tooltipLeft + 'px',
+                    }"
+                  >
+                    {{ elem.type }}
+                  </div>
+                  <div
+                    :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                    class="absolute text-[white]"
+                  >
+                    {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                  </div>
+                  <div :class="{ counts: elem.count }">{{ elem.count }}</div>
+                  <img
+                    :class="{
+                      'bg-transparent': true,
+                      'bg-gradient-purple': elem.type === 'weapon',
+                      'bg-gradient-blue': elem.type === 'armor',
+                      ' opacity-[37%]': elem.cooldown,
+                    }"
+                    :src="elem.imageUrl"
+                    alt="/public/misc.svg"
+                  />
                 </div>
-                <div :class="{ counts: elem.count }">{{ elem.count }}</div>
-                <img
-                  :class="{
-                    'bg-transparent': true,
-                    'bg-gradient-purple': elem.type === 'weapon',
-                    'bg-gradient-blue': elem.type === 'armor',
-                    ' opacity-[37%]': elem.cooldown,
-                  }"
-                  :src="elem.imageUrl"
-                  alt="/public/misc.svg"
-                />
               </div>
-              <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
+              <div
+                v-for="na in allPiniaInfo.cages"
+                :key="na"
+                class="block-grid__elem empty"
+              ></div></Netting
           ></HeadlessTabPanel>
           <HeadlessTabPanel
             ><div class="flex justify-between">
@@ -168,42 +222,70 @@
                 11/100
               </div>
             </div>
-            <Netting :filt-misc="filtMisc" :all-info="allInfo">
-              <div v-for="(elem, ind) in filtMisc" :key="ind" class="block-grid__elem">
+            <Netting>
+              <div v-for="(elem, ind) in filtMisc" :key="ind" class="relative block-grid__elem">
                 <div
-                  :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
-                  class="tooltip"
+                  ref="item"
+                  @mousemove="showTooltip(e, ind)"
+                  @mouseleave="hideTooltip"
+                  class="relative"
                 >
-                  {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
-                </div>
-                <div :class="{ counts: elem.count }">{{ elem.count }}</div>
-                <img
-                  :class="{
-                    'bg-transparent': true,
-                    'bg-gradient-purple': elem.type === 'weapon',
-                    'bg-gradient-blue': elem.type === 'armor',
-                    ' opacity-[37%]': elem.cooldown,
-                  }"
-                  :src="elem.imageUrl"
-                  alt="/public/misc.svg"
-                />
-              </div>
+                  <div
+                    ref="tooltip"
+                    v-if="allPiniaInfo.currentPosition === ind"
+                    :class="{ [`tooltip-` + ind]: allPiniaInfo.isTooltipVisible }"
+                    class="tooltip text-[#454545] uppercase text-[20px]"
+                    :style="{
+                      top: allPiniaInfo.tooltipTop + 'px',
+                      left: allPiniaInfo.tooltipLeft + 'px',
+                    }"
+                  >
+                    {{ elem.type }}
+                  </div>
 
-              <div v-for="na in cages" :key="na" class="block-grid__elem empty"></div></Netting
+                  <div
+                    :class="{
+                      charges: elem.charges,
+                      'block-grid__elem-cooldown left-[30%] top-[10%]': elem.cooldown,
+                    }"
+                    class="absolute text-[white]"
+                  >
+                    {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
+                  </div>
+                  <div :class="{ counts: elem.count }">
+                    {{ elem.count }}
+                  </div>
+                  <img
+                    :class="{
+                      'bg-transparent': true,
+                      'bg-gradient-purple': elem.type === 'weapon',
+                      'bg-gradient-blue': elem.type === 'armor',
+                      ' opacity-[37%]': elem.cooldown,
+                    }"
+                    :src="elem.imageUrl"
+                    alt="/public/misc.svg"
+                  />
+                </div>
+              </div>
+              <div
+                v-for="na in allPiniaInfo.cages"
+                :key="na"
+                class="block-grid__elem empty"
+              ></div> </Netting
           ></HeadlessTabPanel>
           <HeadlessTabPanel>
             <Netting
-              ><div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+              ><div v-for="na in allPiniaInfo.cages" :key="na" class="block-grid__elem empty"></div
             ></Netting>
           </HeadlessTabPanel>
           <HeadlessTabPanel>
             <Netting
-              ><div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+              ><div v-for="na in allPiniaInfo.cages" :key="na" class="block-grid__elem empty"></div
             ></Netting>
           </HeadlessTabPanel>
           <HeadlessTabPanel>
             <Netting
-              ><div v-for="na in cages" :key="na" class="block-grid__elem empty"></div
+              ><div v-for="na in allPiniaInfo.cages" :key="na" class="block-grid__elem empty"></div
             ></Netting>
           </HeadlessTabPanel>
         </HeadlessTabPanels>
@@ -218,105 +300,29 @@
 import Materials from '~/helpers/Core';
 import type { aboutAllFiltered } from '~/interfaces/load';
 import getFilter from '~/helpers/filter';
-
+import { useItemsStore } from '@/store/items';
 // Инициализируем экземпляр класса Materials.
 
 const category = new Materials('All items', 'Armors', 'miscs', 'weapons');
+
+// Получаем доступ к хранилищу
+const allPiniaInfo = useItemsStore();
+
+console.log(allPiniaInfo.cages);
 
 // Запуск страницы, создание запроса на сервер. Поменяйте параметр на 1,2,3, чтобы получить разные итемы.
 
 const allPageOne = await category.getAllItems(1);
 
-// Временный массив данных. Пришлось создать, так как сервер лежит.
-
-const allInfo = [
-  {
-    id: '3dde92f3bed87eb78a687ad06fe579661f3c8408',
-    type: 'misc',
-    name: 'Energy Dring',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/energy_potion.png?alt=media',
-    count: 50,
-    charges: 3,
-    maxCharges: 3,
-  },
-  {
-    id: 'xa4b9237bachcdf19c0760cab7aec4a8359010b0',
-    type: 'armor',
-    name: 'Magic Boots',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/magic_boots.png?alt=media',
-  },
-  {
-    id: 'ea40e585fc4aba2ab50ba2e5859fa885250be57d',
-    type: 'misc',
-    name: 'Energy Dring',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/energy_potion.png?alt=media',
-    count: 1,
-    charges: 3,
-    maxCharges: 3,
-  },
-  {
-    id: 'da4b9237bacccdf19c0760cab7aec4a8359010b0',
-    type: 'weapon',
-    name: 'Double Swords',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/weapon_dark_saber_combo_icon.png?alt=media',
-  },
-  {
-    id: '8d8b20c6a8d6f1b7bea7b701dc450488543f479a',
-    type: 'weapon',
-    name: 'Drone Weapon',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/weapon_dron_shield_icon.png?alt=media',
-  },
-  {
-    id: '350702752173745b7ecf053d5ac7c0f3ae8c2b30',
-    type: 'misc',
-    name: 'Scroll',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/scroll.png?alt=media',
-    count: 2,
-  },
-  {
-    id: '95a2b45d0959fce61de5e695235fb8edbfebad66',
-    type: 'armor',
-    name: 'Drone Shield',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/weapon_dron_shield_icon.png?alt=media',
-  },
-  {
-    id: '15140a758aaeaf5f8d2a45e619c8349fc7ea91ae',
-    type: 'misc',
-    name: 'Strange Potion',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
-    count: 8,
-    cooldown: '10s',
-  },
-  {
-    id: '67140a758aaeaf5f8d2a45e619c8349fc7ea91ae',
-    type: 'misc',
-    name: 'Strange Potion',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
-    count: 1,
-    charges: 3,
-    maxCharges: 3,
-  },
-];
-
-// Когда сервер очнётся, раскомментируй.
-//const allInfo = ref(allPageOne);
-
-// Declaring params
+const allInfo = ref(allPageOne);
+console.log(allInfo.value);
+// Объявляем переменные для фильтрации и типизируем их.
 
 const filtArmor = <aboutAllFiltered[]>[];
 const filtMisc = <aboutAllFiltered[]>[];
 const filtWeapons = <aboutAllFiltered[]>[];
-const cages = 100; // для получения непустых ячеек
-const extractedData = allInfo; // для получения данных из timestampp в секунды.
+
+const extractedData = allInfo; // для получения данных из timestampp в секунды. Сервер лежит, оно не требуется, но логика для него написана.
 
 // Проверяем, выполнился ли промис и если да, то запускаем фильтрацию.
 
@@ -330,36 +336,29 @@ if (allInfo.value) {
 
 // Переменные для вычисления текущий позиции относительно родителя
 
-const item = <string>'';
-const tooltip = ref<string>('');
-const currentPosition = ref<number | string>(0);
-const isTooltipVisible = ref<boolean>(false);
-const tooltipTop = ref<number>(0);
-const tooltipLeft = ref<number>(0);
-
 // Функция, которая отлавливает курсор и позволяет подсказке следовать за ним если значение true
 
 const handleMouseMove = (e: any) => {
-  if (isTooltipVisible.value) {
-    tooltipTop.value = e.clientY + 10;
-    tooltipLeft.value = e.clientX + 10;
+  if (allPiniaInfo.isTooltipVisible) {
+    allPiniaInfo.tooltipTop = e.clientY + 10;
+    allPiniaInfo.tooltipLeft = e.clientX + 10;
   }
 };
 
 // Функция, которая отлавливает курсор в зависимости от индекса элемента. Чтобы подсказка появлялась только у определённого элемента.
 
 const showTooltip = (e: any, index: number) => {
-  currentPosition.value = index;
-  isTooltipVisible.value = true;
-  tooltipTop.value = e.clientY + 10;
-  tooltipLeft.value = e.clientX + 10;
+  allPiniaInfo.currentPosition = index;
+  allPiniaInfo.isTooltipVisible = true;
+  allPiniaInfo.tooltipTop = e.clientY + 10;
+  allPiniaInfo.tooltipLeft = e.clientX + 10;
 };
 
 // Функция, которая скрывает подсказку, если курсор вне элемента.
 
 const hideTooltip = () => {
-  isTooltipVisible.value = false;
-  currentPosition.value = '';
+  allPiniaInfo.isTooltipVisible = false;
+  allPiniaInfo.currentPosition = '';
 };
 
 // Безымянная асинхронная функция, которая ждёт, промис, который скрывает подсказку и добавляет возможность следить за курсором с помощью объекта window.
