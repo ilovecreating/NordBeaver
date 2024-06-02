@@ -10,9 +10,9 @@
 <style lang="scss">
 .block-grid {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 100px 100px 100px 100px 100px 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px;
   height: 1200px;
-
+  position: relative;
   &__elem {
     display: flex;
     align-items: center;
@@ -25,7 +25,8 @@
     font-family: 'Commuters Sans';
     font-size: 20px;
     line-height: 25px;
-    transform: translate(0, 15px);
+    transform: translate(0, 25px);
+
     &::before {
       content: '';
       display: block;
