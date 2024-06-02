@@ -217,7 +217,6 @@
 <script setup lang="ts">
 import Materials from '~/helpers/Core';
 import type { aboutAllFiltered } from '~/interfaces/load';
-import type { T } from '~/interfaces/load';
 import getFilter from '~/helpers/filter';
 
 // Инициализируем экземпляр класса Materials.
@@ -228,7 +227,7 @@ const category = new Materials('All items', 'Armors', 'miscs', 'weapons');
 
 const allPageOne = await category.getAllItems(1);
 
-// Declaring params
+// Временный массив данных. Пришлось создать, так как сервер лежит.
 
 const allInfo = [
   {
@@ -310,6 +309,9 @@ const allInfo = [
 
 // Когда сервер очнётся, раскомментируй.
 //const allInfo = ref(allPageOne);
+
+// Declaring params
+
 const filtArmor = <aboutAllFiltered[]>[];
 const filtMisc = <aboutAllFiltered[]>[];
 const filtWeapons = <aboutAllFiltered[]>[];
@@ -324,13 +326,9 @@ if (allInfo.value) {
   console.log(isHovered[0]);
 
   console.log(allInfo.value[0]);
-
-  //  const setActive = (elem, value) => {
-  //    return (elem.isTrue = value);
-  //  };
 }
 
-// Переменные для вычисления текущий позиции относительно
+// Переменные для вычисления текущий позиции относительно родителя
 
 const item = <string>'';
 const tooltip = ref<string>('');
@@ -339,12 +337,16 @@ const isTooltipVisible = ref<boolean>(false);
 const tooltipTop = ref<number>(0);
 const tooltipLeft = ref<number>(0);
 
+// Функция, которая отлавливает курсор и позволяет подсказке следовать за ним если значение true
+
 const handleMouseMove = (e: any) => {
   if (isTooltipVisible.value) {
     tooltipTop.value = e.clientY + 10;
     tooltipLeft.value = e.clientX + 10;
   }
 };
+
+// Функция, которая отлавливает курсор в зависимости от индекса элемента. Чтобы подсказка появлялась только у определённого элемента.
 
 const showTooltip = (e: any, index: number) => {
   currentPosition.value = index;
@@ -353,10 +355,15 @@ const showTooltip = (e: any, index: number) => {
   tooltipLeft.value = e.clientX + 10;
 };
 
+// Функция, которая скрывает подсказку, если курсор вне элемента.
+
 const hideTooltip = () => {
   isTooltipVisible.value = false;
   currentPosition.value = '';
 };
+
+// Безымянная асинхронная функция, которая ждёт, промис, который скрывает подсказку и добавляет возможность следить за курсором с помощью объекта window.
+// Сделано для того, чтобы подсказка на секунду не возникала в углу экрана.
 
 (async () => {
   await new Promise<void>((resolve) => {
