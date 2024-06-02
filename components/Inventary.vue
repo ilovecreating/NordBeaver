@@ -20,7 +20,7 @@
       <HeadlessTabGroup>
         <!-- Название каждой из 4 вкладок. -->
         <HeadlessTabList class="w-[64px] flex flex-col items-center bg-[#393839] block__item-2">
-          <Asidebar :all-info="allInfo" class="flex flex-col items-center" />
+          <Asidebar class="flex flex-col items-center" />
         </HeadlessTabList>
         <!-- Содержимое каждой из 4 вкладок. -->
         <HeadlessTabPanels class="min-w-[499px] bg-[#242223] block__item-3">
@@ -58,7 +58,10 @@
                     </div>
 
                     <div
-                      :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
+                      :class="{
+                        charges: elem.charges,
+                        'block-grid__elem-cooldown left-[30%] top-[10%]': elem.cooldown,
+                      }"
                       class="absolute text-[white]"
                     >
                       {{ elem.charges }} {{ elem.charges }} {{ elem.cooldown }}
@@ -167,7 +170,6 @@
             </div>
             <Netting :filt-misc="filtMisc" :all-info="allInfo">
               <div v-for="(elem, ind) in filtMisc" :key="ind" class="block-grid__elem">
-                <div :class="getClass(ind)">{{ console.log(elem.charges) }}</div>
                 <div
                   :class="{ charges: elem.charges, 'block-grid__elem-cooldown': elem.cooldown }"
                   class="tooltip"
@@ -230,65 +232,81 @@ const allPageOne = await category.getAllItems(1);
 
 const allInfo = [
   {
-    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    id: '3dde92f3bed87eb78a687ad06fe579661f3c8408',
     type: 'misc',
-    name: 'Strange Potion',
+    name: 'Energy Dring',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
-    count: 1,
-    cooldown: 10,
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/energy_potion.png?alt=media',
+    count: 50,
     charges: 3,
     maxCharges: 3,
   },
   {
-    id: '29578d4aeb19925563404cab1b3113698893b4b2',
-    type: 'misc',
-    name: 'Strange Potion',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
-    count: 1,
-    cooldown: 10,
-    charges: 3,
-    maxCharges: 3,
-  },
-  {
-    id: '29578d4aeb19925563404cab1b3113698893b4b2',
-    type: 'misc',
-    name: 'Strange Potion',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
-    count: 1,
-    cooldown: 10,
-    charges: 3,
-    maxCharges: 3,
-  },
-  {
-    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    id: 'xa4b9237bachcdf19c0760cab7aec4a8359010b0',
     type: 'armor',
-    name: 'Strange Potion',
+    name: 'Magic Boots',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/magic_boots.png?alt=media',
+  },
+  {
+    id: 'ea40e585fc4aba2ab50ba2e5859fa885250be57d',
+    type: 'misc',
+    name: 'Energy Dring',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/energy_potion.png?alt=media',
     count: 1,
-    cooldown: 10,
     charges: 3,
     maxCharges: 3,
   },
   {
-    id: '29578d4aeb19925563404cab1b3113698893b4b2',
+    id: 'da4b9237bacccdf19c0760cab7aec4a8359010b0',
+    type: 'weapon',
+    name: 'Double Swords',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/weapon_dark_saber_combo_icon.png?alt=media',
+  },
+  {
+    id: '8d8b20c6a8d6f1b7bea7b701dc450488543f479a',
+    type: 'weapon',
+    name: 'Drone Weapon',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/weapon_dron_shield_icon.png?alt=media',
+  },
+  {
+    id: '350702752173745b7ecf053d5ac7c0f3ae8c2b30',
+    type: 'misc',
+    name: 'Scroll',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/scroll.png?alt=media',
+    count: 2,
+  },
+  {
+    id: '95a2b45d0959fce61de5e695235fb8edbfebad66',
+    type: 'armor',
+    name: 'Drone Shield',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/weapon_dron_shield_icon.png?alt=media',
+  },
+  {
+    id: '15140a758aaeaf5f8d2a45e619c8349fc7ea91ae',
+    type: 'misc',
+    name: 'Strange Potion',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
+    count: 8,
+    cooldown: '10s',
+  },
+  {
+    id: '67140a758aaeaf5f8d2a45e619c8349fc7ea91ae',
     type: 'misc',
     name: 'Strange Potion',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/seven-seven-bit-inhouse-helper.appspot.com/o/strange_potion.png?alt=media',
     count: 1,
-    cooldown: 10,
     charges: 3,
     maxCharges: 3,
   },
 ];
-
-function getClass(index) {
-  return { [`active-${index}`]: allInfo.value[index] };
-}
 
 // Когда сервер очнётся, раскомментируй.
 //const allInfo = ref(allPageOne);
@@ -314,21 +332,21 @@ if (allInfo.value) {
 
 // Переменные для вычисления текущий позиции относительно
 
-const item = ref('');
-const tooltip = ref('');
-const currentPosition = ref(0);
-const isTooltipVisible = ref(false);
-const tooltipTop = ref(0);
-const tooltipLeft = ref(0);
+const item = <string>'';
+const tooltip = ref<string>('');
+const currentPosition = ref<number | string>(0);
+const isTooltipVisible = ref<boolean>(false);
+const tooltipTop = ref<number>(0);
+const tooltipLeft = ref<number>(0);
 
-const handleMouseMove = (e) => {
+const handleMouseMove = (e: any) => {
   if (isTooltipVisible.value) {
     tooltipTop.value = e.clientY + 10;
     tooltipLeft.value = e.clientX + 10;
   }
 };
 
-const showTooltip = (e, index) => {
+const showTooltip = (e: any, index: number) => {
   currentPosition.value = index;
   isTooltipVisible.value = true;
   tooltipTop.value = e.clientY + 10;
@@ -341,7 +359,7 @@ const hideTooltip = () => {
 };
 
 (async () => {
-  await new Promise((resolve) => {
+  await new Promise<void>((resolve) => {
     hideTooltip();
     window.addEventListener('mousemove', handleMouseMove);
 

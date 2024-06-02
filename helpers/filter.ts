@@ -25,8 +25,6 @@ export default function getFilter(
   });
 
   extractedData.value.map((item: T) => {
-    item['isTrue'] = false;
-
     if (item['cooldown']) {
       item['cooldown'] = new Date();
       const seconds: string | number = item['cooldown'].getSeconds() + `s`;

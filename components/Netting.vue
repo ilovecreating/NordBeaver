@@ -25,7 +25,8 @@
     font-family: 'Commuters Sans';
     font-size: 20px;
     line-height: 25px;
-    transform: translate(0, 15px);
+    transform: translate(0, 25px);
+
     &::before {
       content: '';
       display: block;
